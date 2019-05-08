@@ -4,7 +4,7 @@
       <b-row>
         <b-col></b-col>
         <b-col>
-          <b-form @submit.prevent="login">
+          <b-form @submit.prevent="register">
             <b-form-group
               label="Username"
               label-for="username"
@@ -20,10 +20,10 @@
               <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
             </b-form-group>
             <b-form-group>
-              <b-button class="btn btn-primary" :disabled="loggingIn" v-on:click="login()">Login</b-button>
+              <b-button class="btn btn-primary" :disabled="loggingIn">Register</b-button>
               <img alt="login loader img"
                    v-show="loggingIn" src="data:image/gifbase64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-              <router-link to="/register" class="btn btn-link">Register</router-link>
+              <router-link to="/login" class="btn btn-link">Login</router-link>
             </b-form-group>
           </b-form>
         </b-col>
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'LoginForm',
+  name: 'RegisterForm',
 
   data () {
     return {
@@ -48,15 +48,19 @@ export default {
 
   computed: {
     ...mapState({
-      loggingIn: state => state.auth.login.loggingIn,
-      submitted: state => state.auth.login.submitted
+      loggingIn: state => state.auth.register.loggingIn,
+      submitted: state => state.auth.register.submitted
     })
   },
 
   methods: {
-    login: function () {
+    register: function () {
       const { username, password } = this
-      this.$store.dispatch('auth/login', { username, password })
+      let data = {
+        username: username,
+        password: password
+      }
+      this.$store.dispatch('auth/register', data)
         .then(() => this.$router.push('/'))
         .catch(err => console.log(err))
     }
