@@ -16,11 +16,17 @@ and depends on bootstrap for UI.
 
 ## Backend
 Please install the following libraries for the backend to work:
+
 pip install django # we need django version 2 or higher
+
 pip install djangorestframework
+
 pip install django-cors-headers
+
 pip install djangorestframework-jwt
+
 pip install rest_framework_jwt
+
 pip install django-cors-header
 
 ### Start the server at 8081
