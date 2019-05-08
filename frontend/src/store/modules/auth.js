@@ -1,8 +1,8 @@
 import axios from 'axios'
 import {
-  OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL, REGISTERATION_URL
+  OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL, REGISTERATION_URL, USER_DETAILS_URL
 } from '../../helpers/urls'
-import {initiateLogin} from '../../helpers/services'
+import { initiateLogin } from '../../helpers/services'
 
 const auth = {
   namespaced: true,
@@ -21,33 +21,38 @@ const auth = {
       submitted: false
     },
     status: '',
-    token: localStorage.getItem('token') || '',
-    user: {}
+    token: localStorage.getItem('token') || null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    role: localStorage.getItem('user_role') || null
   },
 
   mutations: {
     auth_request (state) {
       state.status = 'loading'
     },
-    auth_success (state, token, user) {
+    auth_success (state, payload) {
       state.status = 'success'
-      state.token = token
-      state.user = user
+      state.token = payload.token
+      state.user = payload.user
+      state.role = payload.role
     },
     auth_error (state) {
       state.status = 'error'
     },
     logout (state) {
       state.status = ''
-      state.token = ''
+      state.token = undefined
+      state.role = undefined
+      state.user = undefined
     }
   },
   actions: {
     login ({ commit }, user) {
       let OBTAIN_TOKEN = OBTAIN_TOKEN_URL
       let REFRESH_TOKEN = REFRESH_TOKEN_URL
+      let USER_DETAILS = USER_DETAILS_URL
 
-      initiateLogin(commit, OBTAIN_TOKEN, REFRESH_TOKEN, user)
+      initiateLogin(commit, OBTAIN_TOKEN, REFRESH_TOKEN, USER_DETAILS, user)
     },
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
@@ -60,6 +65,8 @@ const auth = {
             commit('auth_error', err)
             localStorage.removeItem('token')
             localStorage.removeItem('refresh_token')
+            localStorage.removeItem('user')
+            localStorage.removeItem('user_role')
             reject(err)
           })
       })
@@ -69,17 +76,20 @@ const auth = {
         commit('logout')
         localStorage.removeItem('token')
         localStorage.removeItem('refresh_token')
+        localStorage.removeItem('user')
+        localStorage.removeItem('user_role')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
     }
   },
   getters: {
-    username (state) {
-      return state.username
+    user (state) {
+      return state.user
     },
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    userRole: state => state.role
   }
 }
 

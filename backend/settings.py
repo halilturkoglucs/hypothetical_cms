@@ -171,7 +171,4 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8080',
-    '127.0.0.1:8080'
-)
+CORS_ORIGIN_ALLOW_ALL = True
