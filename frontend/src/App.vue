@@ -2,9 +2,9 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about" v-if="isLoggedIn">About |</router-link>
+      <router-link to="/about" v-if="isLoggedIn">About | </router-link>
       <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Register</router-link>
+      <router-link to="/login" @click.native="logout" v-if="isLoggedIn">Logout</router-link>
     </div>
     <router-view/>
   </div>
@@ -14,6 +14,11 @@
 export default {
   computed: {
     isLoggedIn: function () { return this.$store.getters['auth/isLoggedIn'] }
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch('auth/logout')
+    }
   },
   created: function () {
     this.$http.interceptors.response.use(undefined, function (err) {

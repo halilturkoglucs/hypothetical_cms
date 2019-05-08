@@ -6,8 +6,11 @@ Please have a look at all the libraries listed under package.json
 
 Thanks these blogs for helping me out:
 https://jasonwatmore.com/post/2018/07/14/vue-vuex-user-registration-and-login-tutorial-example#auth-header-js
+
 https://www.pydanny.com/drf-jwt-axios-vue.html
+
 https://scotch.io/tutorials/handling-authentication-in-vue-using-vuex
+
 https://hackernoon.com/jwt-authentication-in-vue-js-and-django-rest-framework-part-1-c40c5c0d4f6e
 
 ## Frontend
