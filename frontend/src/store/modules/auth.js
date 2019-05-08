@@ -1,5 +1,8 @@
 import axios from 'axios'
-import { OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL } from '../../helpers/urls'
+import {
+  OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL, REGISTERATION_URL
+} from '../../helpers/urls'
+import {initiateLogin} from '../../helpers/services'
 
 const auth = {
   namespaced: true,
@@ -21,6 +24,7 @@ const auth = {
     token: localStorage.getItem('token') || '',
     user: {}
   },
+
   mutations: {
     auth_request (state) {
       state.status = 'loading'
@@ -40,42 +44,22 @@ const auth = {
   },
   actions: {
     login ({ commit }, user) {
-      console.log(user)
-      let url = OBTAIN_TOKEN_URL
+      let OBTAIN_TOKEN = OBTAIN_TOKEN_URL
+      let REFRESH_TOKEN = REFRESH_TOKEN_URL
 
-      return new Promise((resolve, reject) => {
-        commit('auth_request')
-        axios({ url: url, data: user, method: 'POST' })
-          .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
-            localStorage.setItem('token', token)
-            axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
-            resolve(resp)
-          })
-          .catch(err => {
-            commit('auth_error')
-            localStorage.removeItem('token')
-            reject(err)
-          })
-      })
+      initiateLogin(commit, OBTAIN_TOKEN, REFRESH_TOKEN, user)
     },
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
-        axios({ url: 'http://localhost:3000/register', data: user, method: 'POST' })
+        axios({ url: REGISTERATION_URL, data: user, method: 'POST' })
           .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
-            localStorage.setItem('token', token)
-            axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
             resolve(resp)
           })
           .catch(err => {
             commit('auth_error', err)
             localStorage.removeItem('token')
+            localStorage.removeItem('refresh_token')
             reject(err)
           })
       })
@@ -84,6 +68,7 @@ const auth = {
       return new Promise((resolve, reject) => {
         commit('logout')
         localStorage.removeItem('token')
+        localStorage.removeItem('refresh_token')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })

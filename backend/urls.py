@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from .app.views import EmployeeViewSet, EmployerViewSet
+from .app.views import EmployeeViewSet, EmployerViewSet, UserViewSet
 
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 router = DefaultRouter()
 router.register(r'employees', EmployeeViewSet)
 router.register(r'employers', EmployerViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

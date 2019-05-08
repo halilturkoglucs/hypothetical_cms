@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about" v-if="isLoggedIn">About | </router-link>
-      <router-link to="/login">Login</router-link> |
+      <router-link to="/">Home</router-link> <span v-if="isLoggedIn"> | </span>
+      <router-link to="/about" v-if="isLoggedIn">About</router-link> <span v-if="!isLoggedIn"> | </span>
+      <router-link to="/login" v-if="!isLoggedIn">Login</router-link> <span v-if="!isLoggedIn"> | </span>
+      <router-link to="/register" v-if="!isLoggedIn">Register</router-link> <span v-if="isLoggedIn"> | </span>
       <router-link to="/login" @click.native="logout" v-if="isLoggedIn">Logout</router-link>
     </div>
     <router-view/>
