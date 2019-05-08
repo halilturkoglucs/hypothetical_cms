@@ -5,7 +5,7 @@ import store from './store/store'
 
 Vue.use(Router)
 
-let router = new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -38,6 +38,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log('aa')
     if (store.getters.isLoggedIn) {
       next()
       return

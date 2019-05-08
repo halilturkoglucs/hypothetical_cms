@@ -25,19 +25,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.email
 
 class Employer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     company_name = models.CharField(name="company_name", max_length=500)
-
-    @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        if created:
-            if instance.role == "EMPLOYER":
-                Employer.objects.create(user=instance)
-        if instance.role == "EMPLOYER":
-            instance.employer.save()
 
 class Employee(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)

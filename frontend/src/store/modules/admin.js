@@ -1,18 +1,29 @@
 import axios from 'axios'
 import {
-  GET_USERS_URL, USER_DETAILS_URL
+  GET_USERS_URL, USER_DETAILS_URL,
+  GET_EMPLOYEES_URL, GET_EMPLOYERS_URL
 } from '../../helpers/urls'
 
 const admin = {
   namespaced: true,
 
   state: {
-    users: []
+    users: [],
+    employees: [],
+    employers: []
   },
 
   mutations: {
     get_users (state, payload) {
       state.users = payload
+    },
+
+    get_employees (state, payload) {
+      state.employees = payload
+    },
+
+    get_employers (state, payload) {
+      state.employers = payload
     }
   },
   actions: {
@@ -28,6 +39,36 @@ const admin = {
         })
         .catch(err => {
           console.log('Users could not be fetched: ' + err)
+        })
+    },
+
+    getEmployees ({ commit }) {
+      let EMPLOYEES_URL = GET_EMPLOYEES_URL
+
+      axios({ url: EMPLOYEES_URL, method: 'GET' })
+        .then(resp => {
+          const { data } = resp
+          commit('get_employees', data)
+
+          return resp
+        })
+        .catch(err => {
+          console.log('Employees could not be fetched: ' + err)
+        })
+    },
+
+    getEmployers ({ commit }) {
+      let EMPLOYERS_URL = GET_EMPLOYERS_URL
+
+      axios({ url: EMPLOYERS_URL, method: 'GET' })
+        .then(resp => {
+          const { data } = resp
+          commit('get_employers', data)
+
+          return resp
+        })
+        .catch(err => {
+          console.log('Employers could not be fetched: ' + err)
         })
     },
 
