@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-  OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL, REGISTERATION_URL, USER_DETAILS_URL
+  OBTAIN_TOKEN_URL, REFRESH_TOKEN_URL, REGISTERATION_URL, GET_USERS_URL
 } from '../../helpers/urls'
 import { initiateLogin } from '../../helpers/services'
 
@@ -50,13 +50,17 @@ const auth = {
     login ({ commit }, user) {
       let OBTAIN_TOKEN = OBTAIN_TOKEN_URL
       let REFRESH_TOKEN = REFRESH_TOKEN_URL
-      let USER_DETAILS = USER_DETAILS_URL
+      let USER_DETAILS = GET_USERS_URL
 
       initiateLogin(commit, OBTAIN_TOKEN, REFRESH_TOKEN, USER_DETAILS, user)
     },
     register ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
+
+        // Manually add role for now
+        user.role = 'USER'
+
         axios({ url: REGISTERATION_URL, data: user, method: 'POST' })
           .then(resp => {
             resolve(resp)

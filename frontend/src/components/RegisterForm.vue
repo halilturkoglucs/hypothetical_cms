@@ -1,16 +1,16 @@
 <template>
   <div>
-    <b-container class="bv-example-row">
+    <b-container>
       <b-row>
         <b-col></b-col>
         <b-col>
           <b-form @submit.prevent="register">
             <b-form-group
-              label="Username"
-              label-for="username"
+              label="email"
+              label-for="email"
             >
-              <b-form-input type="text" v-model="username" name="username" class="form-control" :class="{ 'is-invalid': submitted && !username }" />
-              <div v-show="submitted && !username" class="invalid-feedback">Username is required</div>
+              <b-form-input type="text" v-model="email" name="email" class="form-control" :class="{ 'is-invalid': submitted && !email }" />
+              <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
             </b-form-group>
             <b-form-group
               label="Password"
@@ -41,7 +41,7 @@ export default {
 
   data () {
     return {
-      username: '',
+      email: '',
       password: ''
     }
   },
@@ -55,15 +55,15 @@ export default {
 
   methods: {
     register: function () {
-      const { username, password } = this
+      const { email, password } = this
       let data = {
-        username: username,
+        email: email,
         password: password
       }
       this.$store.dispatch('auth/register', data)
         .then(() => {
           // Initiate login since the user is registered now
-          this.$store.dispatch('auth/login', { username, password })
+          this.$store.dispatch('auth/login', { email, password })
             .then(() => this.$router.push('/'))
             .catch(err => console.log(err))
         })

@@ -1,17 +1,20 @@
 from django.shortcuts import render
 
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .models import Employee, Employer
-from django.contrib.auth.models import User
+from .models import Employee, Employer, CustomUser
 from .serializers import EmployeeSerializer, EmployerSerializer, UserSerializer
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.AllowAny,)
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ['email']
     # authentication_classes = (JSONWebTokenAuthentication,)
     # permission_classes = (permissions.IsAuthenticated,)
 
@@ -19,8 +22,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class EmployerViewSet(viewsets.ModelViewSet):
     queryset = Employer.objects.all()
     serializer_class = EmployerSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = (permissions.AllowAny,)

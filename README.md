@@ -34,6 +34,8 @@ pip install rest_framework_jwt
 
 pip install django-cors-header
 
+pip install django-filter
+
 ### Start the server at 8081
 cd backend (where manage.py is located)
 and run:

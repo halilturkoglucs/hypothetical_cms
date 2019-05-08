@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld v-if="!role" msg="Welcome to Your Vue.js App"/>
+    <HelloWorld v-if="!role || role === 'USER'" msg="Welcome to Your Vue.js App"/>
     <AdminHome v-if="role === 'ADMIN'" />
     <EmployeeHome v-if="role === 'EMPLOYEE'" />
     <EmployerHome v-if="role === 'EMPLOYER'" />

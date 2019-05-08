@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'backend.app',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 import datetime
@@ -172,3 +174,6 @@ JWT_AUTH = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+## Custom User Model Settings
+AUTH_USER_MODEL = 'app.CustomUser'

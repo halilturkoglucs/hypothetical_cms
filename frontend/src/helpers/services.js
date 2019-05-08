@@ -39,21 +39,16 @@ export function initiateLogin (commit, loginUrl, refreshTokenUrl, userdetailsUrl
           })
           .then(resp => {
             // Get User details
-            const username = payload.username
-            let userdetailsUrlById = userdetailsUrl.replace("{id}", "1")
+            const email = payload.email
+            let userdetailsUrlById = userdetailsUrl + "?email=" + email
+            console.log(userdetailsUrlById)
 
             axios({ url: userdetailsUrlById, method: 'GET' })
               .then(resp => {
-                let role
+                let user = resp.data[0]
+                let role = user.role
 
-                let user = resp.data
-                if (user.is_superuser) {
-                  role = 'ADMIN'
-                } else {
-                  role = user.role
-                }
-
-                let auth_success_data = {
+                let authSuccessData = {
                   token,
                   user,
                   role
@@ -62,9 +57,16 @@ export function initiateLogin (commit, loginUrl, refreshTokenUrl, userdetailsUrl
                 let userJSONString = JSON.stringify(user)
                 localStorage.setItem('user', userJSONString)
                 localStorage.setItem('user_role', role)
-                commit('auth_success', auth_success_data)
+                commit('auth_success', authSuccessData)
 
                 resolve(resp)
+              })
+              .catch(err => {
+                commit('auth_error')
+                localStorage.removeItem('token')
+                localStorage.removeItem('refresh_token')
+                localStorage.removeItem('user')
+                reject(err)
               })
             resolve(resp)
           })

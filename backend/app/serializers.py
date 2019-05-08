@@ -1,16 +1,15 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Employee, Employer
-from django.contrib.auth.models import User
+from .models import Employee, Employer, CustomUser
 
 class UserSerializer(ModelSerializer):
     """ A serializer class for the User model """
     class Meta:
         # Specify the model we are using
-        model = User
+        model = CustomUser
         # Specify the fields that should be made accessible.
         # Mostly it is all fields in that model
-        fields = ('id', 'first_name', 'last_name', 'username',
-                  'password', 'is_active', 'is_superuser')
+        fields = ('id', 'email', 'first_name', 'last_name',
+                  'password', 'role')
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
