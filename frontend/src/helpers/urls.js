@@ -13,3 +13,7 @@ export const EMPLOYER_DETAILS_URL = BASE_URL + '/employers/{id}/'
 // Employee URLs
 export const GET_EMPLOYEES_URL = BASE_URL + '/employees/'
 export const EMPLOYEE_DETAILS_URL = BASE_URL + '/employees/{id}/'
+
+// Task URLs
+export const GET_TASKS_URL = BASE_URL + '/tasks/'
+export const TASK_DETAILS_URL = BASE_URL + '/tasks/{id}/'

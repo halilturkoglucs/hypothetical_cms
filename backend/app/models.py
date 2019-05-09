@@ -40,3 +40,10 @@ class Employee(models.Model):
                              related_name='employment_info')
     employer = models.ForeignKey(Employer, on_delete=models.PROTECT,
                                  related_name='employees')
+
+
+class Task(models.Model):
+    description = models.CharField(name="description", max_length=500)
+    employee = models.ForeignKey(Employee, on_delete=models.PROTECT,
+                                 related_name='tasks')
+    status = models.CharField(name="status", max_length=500, default='TODO')

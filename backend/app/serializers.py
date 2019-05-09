@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Employee, Employer, CustomUser
+from .models import Employee, Employer, CustomUser, Task
 
 class UserSerializer(ModelSerializer):
     """ A serializer class for the User model """
@@ -32,6 +32,7 @@ class UserSerializer(ModelSerializer):
         instance.save()
         return instance
 
+
 class EmployerSerializer(ModelSerializer):
     class Meta:
         model = Employer
@@ -40,6 +41,7 @@ class EmployerSerializer(ModelSerializer):
     def to_representation(self, instance):
         self.fields['user'] = UserSerializer(read_only=False)
         return super(EmployerSerializer, self).to_representation(instance)
+
 
 class EmployeeSerializer(ModelSerializer):
     class Meta:
@@ -50,3 +52,14 @@ class EmployeeSerializer(ModelSerializer):
         self.fields['user'] = UserSerializer(read_only=False)
         self.fields['employer'] = EmployerSerializer(read_only=False)
         return super(EmployeeSerializer, self).to_representation(instance)
+
+
+class TaskSerializer(ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'employee', 'description', 'status')
+
+    def to_representation(self, instance):
+        self.fields['employee'] = EmployeeSerializer(read_only=False)
+        return super(TaskSerializer, self).to_representation(instance)
+

@@ -22,6 +22,12 @@ const router = new Router({
       name: 'home',
       component: Home
     },
+    ,
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: () => import('./views/Tasks.vue')
+    },
     {
       path: '/employees',
       name: 'employees',

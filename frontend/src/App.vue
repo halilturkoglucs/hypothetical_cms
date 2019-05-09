@@ -5,12 +5,15 @@
       <router-link to="/about" v-if="isLoggedIn">About</router-link> <span v-if="!isLoggedIn"> | </span>
       <router-link to="/login" v-if="!isLoggedIn">Login</router-link> <span v-if="!isLoggedIn"> | </span>
       <router-link to="/register" v-if="!isLoggedIn">Register</router-link> <span v-if="isLoggedIn"> | </span>
-      <router-link to="/employees" v-if="userRole == 'ADMIN' || userRole == 'EMPLOYER'">
-        Manage Employees
-      </router-link> <span v-if="userRole == 'ADMIN'"> | </span>
       <router-link to="/employers" v-if="userRole == 'ADMIN'">
         Manage Employers
       </router-link> <span v-if="userRole == 'ADMIN'"> | </span>
+      <router-link to="/employees" v-if="userRole == 'ADMIN' || userRole == 'EMPLOYER'">
+        Manage Employees
+      </router-link> <span v-if="userRole == 'ADMIN' || userRole == 'EMPLOYER'"> | </span>
+      <router-link to="/tasks" v-if="userRole == 'ADMIN' || userRole == 'EMPLOYER' || userRole == 'EMPLOYEE'">
+        Manage Tasks
+      </router-link> <span v-if="userRole == 'ADMIN' || userRole == 'EMPLOYER' || userRole == 'EMPLOYEE'"> | </span>
       <router-link to="/login" @click.native="logout" v-if="isLoggedIn">Logout</router-link>
     </div>
     <router-view/>
