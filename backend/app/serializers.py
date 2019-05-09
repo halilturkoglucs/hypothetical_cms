@@ -10,6 +10,9 @@ class UserSerializer(ModelSerializer):
         # Mostly it is all fields in that model
         fields = ('id', 'email', 'first_name', 'last_name',
                   'password', 'role')
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -32,9 +35,18 @@ class UserSerializer(ModelSerializer):
 class EmployerSerializer(ModelSerializer):
     class Meta:
         model = Employer
-        fields = ('user', 'company_name')
+        fields = ('id', 'user', 'company_name')
+
+    def to_representation(self, instance):
+        self.fields['user'] = UserSerializer(read_only=False)
+        return super(EmployerSerializer, self).to_representation(instance)
 
 class EmployeeSerializer(ModelSerializer):
     class Meta:
         model = Employee
-        fields = ('user', 'employer')
+        fields = ('id', 'user', 'employer')
+
+    def to_representation(self, instance):
+        self.fields['user'] = UserSerializer(read_only=False)
+        self.fields['employer'] = EmployerSerializer(read_only=False)
+        return super(EmployeeSerializer, self).to_representation(instance)

@@ -6,6 +6,20 @@
         <b-col>
           <b-form @submit.prevent="register">
             <b-form-group
+              label="First Name"
+              label-for="firstName"
+            >
+              <b-form-input type="text" v-model="firstName" name="firstName" class="form-control" :class="{ 'is-invalid': submitted && !email }" />
+              <div v-show="submitted && !firstName" class="invalid-feedback">First Name is required</div>
+            </b-form-group>
+            <b-form-group
+              label="Last Name"
+              label-for="lastName"
+            >
+              <b-form-input type="text" v-model="lastName" name="lastName" class="form-control" :class="{ 'is-invalid': submitted && !email }" />
+              <div v-show="submitted && !lastName" class="invalid-feedback">Last Name is required</div>
+            </b-form-group>
+            <b-form-group
               label="email"
               label-for="email"
             >
@@ -42,7 +56,9 @@ export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      firstName: '',
+      lastName: ''
     }
   },
 
@@ -55,15 +71,17 @@ export default {
 
   methods: {
     register: function () {
-      const { email, password } = this
+      const { email, password, firstName, lastName } = this
       let data = {
         email: email,
-        password: password
+        password: password,
+        first_name: firstName,
+        last_name: lastName
       }
       this.$store.dispatch('auth/register', data)
         .then(() => {
           // Initiate login since the user is registered now
-          this.$store.dispatch('auth/login', { email, password })
+          this.$store.dispatch('auth/login', data)
             .then(() => this.$router.push('/'))
             .catch(err => console.log(err))
         })

@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from .managers import CustomUserManager
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     is_staff = models.BooleanField(default=False)
@@ -27,10 +28,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+
 class Employer(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
+                             related_name='employer_info')
     company_name = models.CharField(name="company_name", max_length=500)
 
+
 class Employee(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    employer = models.ForeignKey(Employer, on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
+                             related_name='employment_info')
+    employer = models.ForeignKey(Employer, on_delete=models.PROTECT,
+                                 related_name='employees')

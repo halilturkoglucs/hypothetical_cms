@@ -1,22 +1,22 @@
 <template>
   <div class="hello">
     <h2>
-      ADMIN HOME
+      MANAGE EMPLOYEES
     </h2>
     <div>
-      <h5>Users List</h5>
+      <h5>Employees List</h5>
       <b-container>
         <b-row>
           <b-col></b-col>
           <b-col cols="8">
-            <b-table striped hover :items="users" :fields="fields">
-              <template slot="actions" scope="userRow">
-                <b-button variant="outline-primary" v-b-modal="'modal-multi-' + userRow.item.id" @click="edit(userRow.item)">
+            <b-table striped hover :items="employees" :fields="employees_fields">
+              <template slot="actions" scope="employeeRow">
+                <b-button variant="outline-primary" v-b-modal="'modal-multi-employee-' + employeeRow.item.id" @click="edit(employeeRow.item)">
                   Edit
                 </b-button>
                 <!-- User Edit Window -->
                 <div>
-                  <b-modal v-bind:id="'modal-multi-' + userRow.item.id" size="lg" title="Edit User" ok-only no-stacking>
+                  <b-modal v-bind:id="'modal-multi-employee' + employeeRow.item.id" size="lg" title="Edit Employee" ok-only no-stacking>
                     <b-container>
                       <b-row>
                         <b-col></b-col>
@@ -26,23 +26,23 @@
                               label="email"
                               label-for="email"
                             >
-                              <b-form-input type="text" v-model="userRow.item.email" name="email" class="form-control" />
+                              <b-form-input type="text" v-model="employeeRow.item.email" name="email" class="form-control" />
                             </b-form-group>
                             <b-form-group
                               label="Password"
                               label-for="password"
                             >
-                              <b-form-input type="password" v-model="userRow.item.password" name="password" class="form-control" />
+                              <b-form-input type="password" v-model="employeeRow.item.password" name="password" class="form-control" />
                             </b-form-group>
                             <b-form-group
                               label="role"
                               label-for="role"
                             >
-                              <b-form-select v-model="userRow.item.role" :options="userRolesList" class="form-control">
+                              <b-form-select v-model="employeeRow.item.role" :options="userRolesList" class="form-control">
                               </b-form-select>
                             </b-form-group>
                             <b-form-group>
-                              <b-button v-b-modal="'modal-multi-second-' + userRow.item.id" v-on:click="saveUser(userRow.item)">Save</b-button>
+                              <b-button v-b-modal="'modal-multi-employee-second-' + employeeRow.item.id" v-on:click="saveUser(userRow.item)">Save</b-button>
                             </b-form-group>
                           </b-form>
                         </b-col>
@@ -51,37 +51,11 @@
                     </b-container>
                   </b-modal>
 
-                  <b-modal v-bind:id="'modal-multi-second-' + userRow.item.id" title="Success" ok-only>
+                  <b-modal v-bind:id="'modal-multi-employee-second-' + employeeRow.item.id" title="Success" ok-only>
                     <p class="my-2">Please close the window</p>
                   </b-modal>
                 </div>
               </template>
-            </b-table>
-          </b-col>
-          <b-col></b-col>
-        </b-row>
-      </b-container>
-    </div>
-    <div>
-      <h5>Employees List</h5>
-      <b-container>
-        <b-row>
-          <b-col></b-col>
-          <b-col cols="8">
-            <b-table striped hover :items="employees" :fields="employees_fields">
-            </b-table>
-          </b-col>
-          <b-col></b-col>
-        </b-row>
-      </b-container>
-    </div>
-    <div>
-      <h5>Employers List</h5>
-      <b-container>
-        <b-row>
-          <b-col></b-col>
-          <b-col cols="8">
-            <b-table striped hover :items="employers" :fields="employers_fields">
             </b-table>
           </b-col>
           <b-col></b-col>
@@ -120,7 +94,7 @@ export default {
         }
       },
       employees_fields: {
-        'id': {
+        'user.id': {
           sortable: true,
           label: 'Id'
         },
@@ -129,7 +103,7 @@ export default {
         }
       },
       employers_fields: {
-        'id': {
+        'user.id': {
           sortable: true,
           label: 'Id'
         },
@@ -140,7 +114,7 @@ export default {
     }
   },
 
-  name: 'AdminHome',
+  name: 'ManageEmployees',
 
   props: {
   },
@@ -148,8 +122,7 @@ export default {
   computed: {
     ...mapState({
       users: state => state.admin.users,
-      employees: state => state.admin.employees,
-      employers: state => state.admin.employers
+      employees: state => state.admin.employees
     })
   },
 
@@ -167,8 +140,15 @@ export default {
 
   mounted () {
     this.$store.dispatch('admin/getUsers')
-    this.$store.dispatch('admin/getEmployees')
-    this.$store.dispatch('admin/getEmployers')
+
+    // Only get own employees
+    let role = this.$store.getters['auth/userRole']
+
+    if (role === 'EMPLOYER') {
+      this.$store.dispatch('employer/getEmployees')
+    } else if (role === 'ADMIN') {
+      this.$store.dispatch('admin/getEmployees')
+    }
   }
 }
 </script>

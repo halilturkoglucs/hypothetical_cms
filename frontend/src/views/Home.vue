@@ -25,7 +25,6 @@ export default {
   },
   computed: {
     role: function () {
-      console.log(this.$store.getters['auth/userRole'])
       return this.$store.getters['auth/userRole']
     }
   }

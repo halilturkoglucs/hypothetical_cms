@@ -1,23 +1,18 @@
 import axios from 'axios'
 import {
-  GET_USERS_URL, USER_DETAILS_URL,
+  EMPLOYER_DETAILS_URL,
   GET_EMPLOYEES_URL, GET_EMPLOYERS_URL
 } from '../../helpers/urls'
 
-const admin = {
+const employer = {
   namespaced: true,
 
   state: {
-    users: [],
     employees: [],
     employers: []
   },
 
   mutations: {
-    get_users (state, payload) {
-      state.users = payload
-    },
-
     get_employees (state, payload) {
       state.employees = payload
     },
@@ -27,21 +22,6 @@ const admin = {
     }
   },
   actions: {
-    getUsers ({ commit }) {
-      let USERS_URL = GET_USERS_URL
-
-      axios({ url: USERS_URL, method: 'GET' })
-        .then(resp => {
-          const { data } = resp
-          commit('get_users', data)
-
-          return resp
-        })
-        .catch(err => {
-          console.log('Users could not be fetched: ' + err)
-        })
-    },
-
     getEmployees ({ commit }) {
       let EMPLOYEES_URL = GET_EMPLOYEES_URL
 
@@ -72,11 +52,30 @@ const admin = {
         })
     },
 
-    saveUser ({ commit }, user) {
-      let userUpdateUrlById = USER_DETAILS_URL.replace('{id}', user.id)
+    register ({ commit }, employer) {
+      return new Promise((resolve, reject) => {
+        // Manually change the role
+        employer.user.role = 'EMPLOYER'
+
+        employer.user = employer.user.id
+
+        axios({ url: GET_EMPLOYERS_URL, data: employer, method: 'POST' })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+
+    saveEmployer ({ commit }, employer) {
+      let employerUpdateUrlById = EMPLOYER_DETAILS_URL.replace('{id}', employer.id)
+
+      employer.user = employer.user.id
 
       return new Promise((resolve, reject) => {
-        axios({ url: userUpdateUrlById, data: user, method: 'PUT' })
+        axios({ url: employerUpdateUrlById, data: employer, method: 'PUT' })
           .then(resp => {
             resolve(resp)
           })
@@ -88,4 +87,4 @@ const admin = {
   }
 }
 
-export default admin
+export default employer

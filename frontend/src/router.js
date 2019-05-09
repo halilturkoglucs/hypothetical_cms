@@ -23,6 +23,16 @@ const router = new Router({
       component: Home
     },
     {
+      path: '/employees',
+      name: 'employees',
+      component: () => import('./views/Employees.vue')
+    },
+    {
+      path: '/employers',
+      name: 'employers',
+      component: () => import('./views/Employers.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -38,7 +48,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log('aa')
     if (store.getters.isLoggedIn) {
       next()
       return
